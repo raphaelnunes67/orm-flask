@@ -1,0 +1,5 @@
+{
+    "login": "clp_client_damper",
+    "password": "damper@2022",
+    "JWT_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NDY3ODM3NzUsIm5iZiI6MTY0Njc4Mzc3NSwianRpIjoiYTg1OTMyNTAtOTNlNi00OTkzLWI3MjgtZGJlZTdiMTA4ZGEzIiwiZXhwIjoxNjQ2Nzg0Njc1LCJpZGVudGl0eSI6MSwiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIn0.odo2eq2KX5Snuae6N2W2pVv4ySPAw28lzsJg2tQmYc0"
+}
