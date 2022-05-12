@@ -1,0 +1,12 @@
+local_server:
+    host: '192.168.0.108'
+    port: 8000
+    login: '?'
+    password: '?'
+    n_values: 2
+
+server:
+    host: '192.168.0.108'
+    port: 9000
+    login: 'admin'
+    password: '123456'
