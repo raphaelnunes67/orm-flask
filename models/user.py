@@ -1,21 +1,22 @@
 from sql_alchemy import database
 
+
 class UserModel(database.Model):
     __tablename__ = 'users'
 
     user_id = database.Column(database.Integer, primary_key=True)
     login = database.Column(database.String(40))
     password = database.Column(database.String(40))
-   
+
     def __init__(self, login, password) -> None:
         self.login = login
         self.password = password
-        
+
     def json(self) -> dict:
         return {
             'user_id': self.user_id,
             'login': self.login
-            }
+        }
 
     @classmethod
     def find_user(cls, user_id):
@@ -23,11 +24,11 @@ class UserModel(database.Model):
         if user:
             return user
         return None
-    
+
     @classmethod
     def query_all(cls):
         users = cls.query.all()
-                
+
         return users
 
     @classmethod
