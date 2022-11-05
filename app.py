@@ -1,7 +1,7 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify
 from flask_restful import Api
-from resources.sysinfo import SysInfos, SysInfo, SysInfosTable, SysInfosExport, SysInfoClean
-from resources.user import User, Users, UserRegister, UserLogin, UserLogout
+from resources.sysinfo import *
+from resources.user import *
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
 from blacklist import BLACKLIST
@@ -19,6 +19,7 @@ database.init_app(app)
 
 api = Api(app)
 jwt = JWTManager(app)
+
 
 api_v1_cors_config = {
     "origins": "*",
@@ -54,23 +55,23 @@ def access_token_invalid():
     return jsonify({'message': 'You have been logged out.'}), 401  # unauthorized
 
 
-# SYSINFO
+# SYSINFO/api/account/user/<id>
 api.add_resource(SysInfo, '/api/sysinfo/<string:id>', methods=['GET', 'DELETE', 'PUT'])
 api.add_resource(SysInfos, '/api/sysinfos/', methods=['POST'])  # USED
 api.add_resource(SysInfosTable, '/api/sysinfos/', methods=['GET'])
-api.add_resource(SysInfosExport, '/api/sysinfos/export', methods=['POST'])
-api.add_resource(SysInfoClean, '/api/sysinfos/clear', methods=['POST'])
+api.add_resource(SysInfosExport, '/api/sysinfos/export/', methods=['POST'])
+api.add_resource(SysInfoDeleteMany, '/api/sysinfos/clear/', methods=['DELETE'])
 
 # USER
 api.add_resource(User, '/api/account/user/<int:user_id>', methods=['GET', 'DELETE', 'PUT'])
-api.add_resource(Users, '/api/account/users', methods=['GET'])
-api.add_resource(UserRegister, '/api/account/register', methods=['POST'])
-api.add_resource(UserLogin, '/api/account/login', methods=['POST'])
-api.add_resource(UserLogout, '/api/account/logout', methods=['GET'])
+api.add_resource(Users, '/api/account/users/', methods=['GET'])
+api.add_resource(UserRegister, '/api/account/register/', methods=['POST'])
+api.add_resource(UserLogin, '/api/account/login/', methods=['POST'])
+api.add_resource(UserLogout, '/api/account/logout/', methods=['GET'])
 
 # if __name__ == '__main__':
 #     from sql_alchemy import database
-#
+
 #     database.init_app(app)
 #     api_v1_cors_config = {
 #         "origins": "*",

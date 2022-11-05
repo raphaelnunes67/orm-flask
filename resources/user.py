@@ -18,7 +18,7 @@ class User(Resource):
             return user.json()
         return {'message': 'User not found'}, 404
 
-    @jwt_required
+   #@jwt_required
     def delete(self, user_id):
         user = UserModel.find_user(user_id)
         if user:
@@ -28,11 +28,28 @@ class User(Resource):
                 user.delete_user()
                 return {'message': 'User deleted'}, 200
         return {'message': 'User not found'}, 404
+    
+    def put(self, user_id):
+        data = attributes.parse_args()
+        
+        if UserModel.find_by_login(data['login']):
+            return {"message": "The login '{}' already exists.".format(data['login'])}
+        
+        user = UserModel.find_user(user_id)
+        
+        if user:
+            user.save_user()
+            return {'message': 'User updated successfully!'}, 200
+
+        user = UserModel(**data)
+        user.save_user()
+        
+        return {'message': 'User created successfully!'}, 201
 
 
 class Users(Resource):
 
-    @jwt_required
+   #@jwt_required
     def get(self):
         if session['login'] == 'admin':
             users = UserModel.query_all()
@@ -72,7 +89,7 @@ class UserLogin(Resource):
 
 class UserLogout(Resource):
 
-    @jwt_required
+   #@jwt_required
     def get(self):
         jwt_id = get_raw_jwt()['jti']  # JWT Token Identifier
         BLACKLIST.add(jwt_id)

@@ -97,3 +97,9 @@ class SysInfoModel(database.Model):
         duts = cls.query.filter(cls.id >= start_id)
         duts = duts.filter(cls.id <= end_id)
         return duts
+
+    @classmethod
+    def bulk_delete(cls, ids: list) -> bool: 
+        result = database.delete(cls).where(cls.id.in_(ids))
+        database.session.execute(result)
+        database.session.commit()                                    

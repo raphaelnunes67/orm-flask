@@ -1,6 +1,4 @@
-from array import array
-from multiprocessing.dummy import Array
-from flask import send_file, after_this_request, request
+from flask import send_file, after_this_request, request, make_response, jsonify
 from flask_restful import Resource, reqparse
 from models.sysinfo import SysInfoModel
 from flask_jwt_extended import jwt_required
@@ -23,7 +21,7 @@ class SysInfo(Resource):
             return sysinfo.json()
         return {'message': 'Information not found.'}, 404
 
-    @jwt_required
+    #@jwt_required
     def put(self, id):
         data = SysInfo.attributes.parse_args()
         sysinfo = SysInfoModel(**data)
@@ -36,7 +34,7 @@ class SysInfo(Resource):
         sysinfo.save_sysinfo()
         return sysinfo.json(), 201
 
-    @jwt_required
+    #@jwt_required
     def delete(self, id):
         sysinfo = SysInfoModel.find_sysinfo(id)
         if sysinfo:
@@ -52,7 +50,7 @@ class SysInfos(Resource):
     attributes.add_argument('workorder', type=str, required=True)
     attributes.add_argument('details', type=str, required=True)
 
-    @jwt_required
+    #@jwt_required
     def post(self):
         @after_this_request
         def handle_database_size(response):
@@ -73,7 +71,7 @@ class SysInfos(Resource):
             return {"message": "An error ocurred trying to create information."}, 500  # Internal Server Error
         return sysinfo.json(), 201
 
-    @jwt_required
+    #@jwt_required
     def delete(self):
         last_id = SysInfoModel.last_sysinfo()
         for id in range(last_id + 1):
@@ -178,14 +176,14 @@ class SysInfosExport(Resource):
     attributes.add_argument('model', type=str, required=True)
     attributes.add_argument('file_type', type=str, required=True)
 
-    @jwt_required
+    #@jwt_required
     def post(self):
         try:
             data = SysInfosExport.attributes.parse_args()
-            from_date_time = data['from']
-            to_date_time = data['to']
-            model = data['model']
-            file_type = data['file_type']
+            from_date_time = data.get('from')
+            to_date_time = data.get('to')
+            model = data.get('model')
+            file_type = data.get('file_type')
             duts = SysInfoModel.filter_results(from_date_time, to_date_time, model)
             matrix = [['id', 'quantity', 'workorder', 'created_at', 'details']]
             for entry in duts:
@@ -222,18 +220,15 @@ class SysInfosExport(Resource):
             return {"message": "An error ocurred trying to create information."}, 500  # Internal Server Error
 
 
-class SysInfoClean(Resource):
+class SysInfoDeleteMany(Resource):
     attributes = reqparse.RequestParser()
     attributes.add_argument('ids', action='append', type=int, required=True)
 
-    @jwt_required
-    def post(self):
+    ##@jwt_required
+    def delete(self):
         ids = self.attributes.parse_args()
-        print(ids)
-        for id in ids:
-            sysinfo = SysInfoModel.find_sysinfo(id)
-            if sysinfo:
-                SysInfo.query.filter(SysInfo.id._in(ids)).delete()
-                sysinfo.delete_sysinfo()
+        ids = ids.get('ids')
+        SysInfoModel.bulk_delete(ids)
+        return make_response(jsonify(result=True), 200)
 
-        return {'message': 'Information deleted.'}, 200
+
