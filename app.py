@@ -4,7 +4,7 @@ from resources.sysinfo import *
 from resources.user import *
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
-from blacklist import BLACKLIST
+from blocklist import BLACKLIST
 from sql_alchemy import database
 import datetime
 

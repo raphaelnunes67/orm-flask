@@ -3,7 +3,7 @@ from flask import session
 from models.user import UserModel
 from flask_jwt_extended import create_access_token, jwt_required, get_raw_jwt
 from werkzeug.security import safe_str_cmp
-from blacklist import BLACKLIST
+from blocklist import BLACKLIST
 
 attributes = reqparse.RequestParser()
 attributes.add_argument('login', type=str, required=True, help="The field 'login' cannot be left blank.")
