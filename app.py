@@ -25,7 +25,7 @@ api_v1_cors_config = {
     "origins": "*",
     "methods": ["OPTIONS", "GET", "POST", "PATCH", "PUT", "DELETE"],
     "allow_headers": ["Authorization", "Content-Type", "Origin"],
-    "expose_headers": ["Content-Disposition"],
+    "expose_headers": ["Content-Disposition" "Authorization", "Content-Type", "Origin"]
 }
 CORS(app, resources={r"/api/*": api_v1_cors_config})
 
