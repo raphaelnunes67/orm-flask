@@ -12,7 +12,7 @@ class SysInfo(Resource):
     attributes = reqparse.RequestParser()
     attributes.add_argument('model', type=str, required=True, help="The field 'model' cannot be left blank.")
     attributes.add_argument('quantity', type=int, required=True)
-    attributes.add_argument('workorder', type=str, required=True)
+    attributes.add_argument('work_order', type=str, required=True)
     attributes.add_argument('details', type=str, required=True)
 
     def get(self, id):
@@ -47,7 +47,7 @@ class SysInfos(Resource):
     attributes = reqparse.RequestParser()
     attributes.add_argument('model', type=str, required=True, help="The field 'model' cannot be left blank.")
     attributes.add_argument('quantity', type=int, required=True)
-    attributes.add_argument('workorder', type=str, required=True)
+    attributes.add_argument('work_order', type=str, required=True)
     attributes.add_argument('details', type=str, required=True)
 
     #@jwt_required
@@ -114,7 +114,7 @@ class SysInfosTable(Resource):
                             'id': entry.id,
                             'model': entry.model,
                             'quantity': entry.quantity,
-                            'workorder': entry.workorder,
+                            'work_order': entry.work_order,
                             'created_at': entry.created_at.isoformat(),
                             'details': entry.details
                         })
@@ -127,7 +127,7 @@ class SysInfosTable(Resource):
                             'id': entry.id,
                             'model': entry.model,
                             'quantity': entry.quantity,
-                            'workorder': entry.workorder,
+                            'work_order': entry.work_order,
                             'created_at': entry.created_at.isoformat(),
                             'details': entry.details
                         })
@@ -152,7 +152,7 @@ class SysInfosTable(Resource):
                                 'id': entry.id,
                                 'model': entry.model,
                                 'quantity': entry.quantity,
-                                'workorder': entry.workorder,
+                                'work_order': entry.work_order,
                                 'created_at': entry.created_at.isoformat(),
                                 'details': entry.details
                             })
@@ -185,9 +185,9 @@ class SysInfosExport(Resource):
             model = data.get('model')
             file_type = data.get('file_type')
             duts = SysInfoModel.filter_results(from_date_time, to_date_time, model)
-            matrix = [['id', 'quantity', 'workorder', 'created_at', 'details']]
+            matrix = [['id', 'quantity', 'work_order', 'created_at', 'details']]
             for entry in duts:
-                row = [entry.id, entry.quantity, entry.workorder, entry.created_at.isoformat(), entry.details]
+                row = [entry.id, entry.quantity, entry.work_order, entry.created_at.isoformat(), entry.details]
                 matrix.append(row)
 
             if file_type == "xlsx":

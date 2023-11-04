@@ -1,4 +1,5 @@
 from sql_alchemy import database
+from datetime import datetime
 
 
 class UserModel(database.Model):
@@ -7,10 +8,14 @@ class UserModel(database.Model):
     user_id = database.Column(database.Integer, primary_key=True)
     login = database.Column(database.String(40))
     password = database.Column(database.String(40))
+    created_at = database.Column(database.DateTime, default=datetime.utcnow)
+    modified_at = database.Column(database.DateTime, default=datetime.utcnow)
 
     def __init__(self, login, password) -> None:
         self.login = login
         self.password = password
+        self.created_at = datetime.utcnow()
+        self.modified_at = datetime.utcnow()
 
     def json(self) -> dict:
         return {

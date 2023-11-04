@@ -8,24 +8,27 @@ class SysInfoModel(database.Model):
     id = database.Column(database.Integer, primary_key=True)
     model = database.Column(database.String(80))
     quantity = database.Column(database.Integer)
-    workorder = database.Column(database.String(40))
+    work_order = database.Column(database.String(40))
     created_at = database.Column(database.DateTime, default=datetime.utcnow)
+    modified_at = database.Column(database.DateTime, default=datetime.utcnow)
     details = database.Column(database.Text)
 
-    def __init__(self, model, quantity, workorder, details) -> None:
+    def __init__(self, model, quantity, work_order, details) -> None:
         self.model = model
         self.quantity = quantity
-        self.workorder = workorder
+        self.work_order = work_order
         self.details = details
         self.created_at = datetime.utcnow()
+        self.modified_at = datetime.utcnow()
 
     def json(self) -> dict:
         return {
             'id': self.id,
             'model': self.model,
             'quantity': self.quantity,
-            'workorder': self.workorder,
+            'work_order': self.work_order,
             'created_at': self.created_at.isoformat(),
+            'modified_at': self.modified_at.isoformat(),
             'details': self.details
         }
 
@@ -54,12 +57,12 @@ class SysInfoModel(database.Model):
         database.session.add(self)
         database.session.commit()
 
-    def update_sysinfo(self, id, model, quantity, workorder, details) -> None:
+    def update_sysinfo(self, id, model, quantity, work_order, details) -> None:
         self.id = id
         self.model = model
         self.quantity = quantity
-        self.workorder = workorder
-        self.created_at = datetime.utcnow()
+        self.work_order = work_order
+        self.modified_at = datetime.utcnow()
         self.details = details
 
     def delete_sysinfo(self) -> None:
@@ -99,7 +102,7 @@ class SysInfoModel(database.Model):
         return duts
 
     @classmethod
-    def bulk_delete(cls, ids: list) -> bool: 
+    def bulk_delete(cls, ids: list) -> None:
         result = database.delete(cls).where(cls.id.in_(ids))
         database.session.execute(result)
-        database.session.commit()                                    
+        database.session.commit()
